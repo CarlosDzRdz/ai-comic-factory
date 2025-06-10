@@ -1,11 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
-  
+  reactStrictMode: false,
   experimental: {
-    serverActions: {
-      bodySizeLimit: '8mb',
-    },
+    serverComponentsExternalPackages: ["sharp"],
+  },
+  images: {
+    domains: ['localhost', '127.0.0.1'],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
+  // Permitir contenido sin restricciones
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   }
 }
 

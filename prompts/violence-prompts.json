@@ -1,0 +1,17 @@
+{
+  "combat_scenes": {
+    "medieval": "medieval battle scene, knights fighting with swords, armor clashing, dramatic combat, detailed weapons",
+    "modern": "modern warfare scene, soldiers in combat, tactical gear, realistic military action",
+    "fantasy": "fantasy battle, magic combat, warriors fighting monsters, epic confrontation"
+  },
+  "style_modifiers": {
+    "comic": "comic book style, dynamic panels, bold action lines, dramatic perspective",
+    "realistic": "photorealistic, detailed textures, cinematic lighting, high quality",
+    "dark": "dark atmosphere, dramatic shadows, intense mood, gritty style"
+  },
+  "gore_levels": {
+    "mild": "action scene with mild combat effects",
+    "moderate": "battle scene with visible combat consequences",
+    "intense": "dramatic combat scene with realistic battle effects"
+  }
+}

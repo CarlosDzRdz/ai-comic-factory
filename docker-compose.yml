@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  ai-comic-factory:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NVIDIA_VISIBLE_DEVICES=all
+    env_file:
+      - .env.local
+    volumes:
+      - ./models:/app/models
+      - ./outputs:/app/outputs
+      - ./cache:/app/cache
+      - ./public:/app/public
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    depends_on:
+      - stable-diffusion
+
+  stable-diffusion:
+    image: pytorch/pytorch:2.1.0-cuda11.8-cudnn8-runtime
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./sd-models:/models
+      - ./sd-outputs:/outputs
+      - ./sd-cache:/cache
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - COMMANDLINE_ARGS=--listen --port 7860 --api --no-half-vae --disable-safe-unpickle --enable-insecure-extension-access
+    command: >
+      bash -c "
+        apt-get update && 
+        apt-get install -y git wget curl &&
+        git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git /app &&
+        cd /app &&
+        python launch.py --listen --port 7860 --api --no-half-vae --disable-safe-unpickle --enable-insecure-extension-access --skip-torch-cuda-test
+      "
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+networks:
+  default:
+    driver: bridge
